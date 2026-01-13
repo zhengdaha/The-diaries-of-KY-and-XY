@@ -2,7 +2,7 @@
     var flakes = [],
         canvas = document.createElement("canvas"),
         ctx = canvas.getContext("2d"),
-        flakeCount = 100, // 飘落物总数
+        flakeCount = 0, // 飘落物总数
         mX = -100,
         mY = -100;
 

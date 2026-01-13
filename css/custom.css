@@ -1,0 +1,82 @@
+/* --- 首页标题样式优化 --- */
+
+/* 1. 加大副标题（打字机部分）的字号 */
+#page-header #site-subtitle {
+    font-size: 2rem !important;  /* 默认大概是 1.2rem，这里调大到 1.8 */
+
+}
+
+/* 2. 加大主标题和副标题之间的间距 */
+#page-header #site-title {
+    margin-bottom: 35px !important; /* 调整这个数字，越大间距越宽 */
+}
+
+/* 3. (可选) 如果觉得副标题太靠下，可以微调它的位置 */
+.brand {
+    padding: 10px 0 !important; /* 增加整体上下的空间 */
+}
+
+
+/* --- 首页下滑按钮：Continue 版本 --- */
+
+/* 1. 隐藏原来的图标 */
+#scroll-down i {
+    display: none;
+}
+
+/* 2. 按钮容器定制 */
+#scroll-down {
+    /* --- 位置调整：离底部更远 --- */
+    position: absolute;
+    bottom: 100px;      /* 从 60px 改到了 100px */
+    left: 50%;
+    transform: translateX(-50%);
+    
+    /* 外观：透明背景 + 白色边框 */
+    width: auto !important;
+    height: auto !important;
+    background: transparent !important;
+    border: 1.5px solid #fff !important;
+    border-radius: 50px;
+    
+    /* 布局 */
+    padding: 10px 28px; /* 稍微加宽一点内边距 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* 交互 */
+    z-index: 1001;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+    /* --- 字体设置：跟主标题保持一致 --- */
+    /* 优先使用主题定义的全局字体变量，如果没有则用系统字体 */
+    font-family: var(--global-font-family), -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif !important;
+    text-shadow: none !important;
+}
+
+/* 3. 内容生成：图标 + Continue */
+#scroll-down::after {
+    /* \f103 是双箭头图标 */
+    content: '\f103   Continue';
+    
+    /* --- 关键：混合字体处理 --- */
+    /* 这里必须包含 Font Awesome 否则图标不显示 */
+    /* 我们把 FA 放在后面，让文字优先使用前面的系统字体 */
+    font-family: "Font Awesome 6 Free", "FontAwesome", var(--global-font-family), sans-serif !important;
+    font-weight: 900 !important; /* 图标必须加粗 */
+    
+    /* 文字样式 */
+    font-size: 18px; /* 稍微调大字号匹配标题 */
+    color: #fff;
+    letter-spacing: 1px;
+    text-transform: capitalize; /* 首字母大写 */
+    line-height: 1;
+}
+
+/* 4. 悬停效果 */
+#scroll-down:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+    transform: translateX(-50%) scale(1.05);
+}
