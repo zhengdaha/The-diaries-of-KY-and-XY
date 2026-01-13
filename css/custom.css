@@ -17,66 +17,216 @@
 }
 
 
-/* --- 首页下滑按钮：Continue 版本 --- */
+/* --- 首页下滑按钮：终极修复版 --- */
 
-/* 1. 隐藏原来的图标 */
+/* 1. 彻底隐藏原来的图标和动画 */
 #scroll-down i {
-    display: none;
+    display: none !important;
 }
 
-/* 2. 按钮容器定制 */
+/* 2. 按钮容器重构 */
 #scroll-down {
-    /* --- 位置调整：离底部更远 --- */
-    position: absolute;
-    bottom: 100px;      /* 从 60px 改到了 100px */
-    left: 50%;
-    transform: translateX(-50%);
+    /* --- 位置强制修复 --- */
+    position: absolute !important;
+    top: auto !important;     /* 必须把 top 设为自动，防止它把按钮锁在上面 */
+    bottom: 7.5vh !important;  /* 距离底部 15% 的屏幕高度（比像素更智能） */
+    left: 50% !important;
+    transform: translateX(-50%) !important;
     
-    /* 外观：透明背景 + 白色边框 */
+    /* --- 外观设置 --- */
     width: auto !important;
     height: auto !important;
     background: transparent !important;
-    border: 1.5px solid #fff !important;
+    border: 2px solid #fff !important; /* 边框稍微加粗一点点 */
     border-radius: 50px;
+    padding: 12px 35px; /* 增加内边距，让按钮更大气 */
     
-    /* 布局 */
-    padding: 10px 28px; /* 稍微加宽一点内边距 */
+    /* --- 布局与交互 --- */
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 9999; /* 保证在最上层 */
+    transition: all 0.3s ease;
+}
+
+/* 3. 【核心修改】用纯 CSS 画一个箭头 (不再依赖字体库，解决方块问题) */
+#scroll-down::before {
+    content: ''; /* 空内容，用来画图 */
+    display: inline-block;
+    width: 10px;  /* 箭头大小 */
+    height: 10px; /* 箭头大小 */
+    
+    /* 只给右边和下边上色，形成一个直角 */
+    border-right: 3px solid #fff; 
+    border-bottom: 3px solid #fff;
+    
+    /* 旋转45度，变成向下箭头 */
+    transform: rotate(45deg); 
+    
+    margin-right: 12px; /* 箭头和文字的距离 */
+    margin-bottom: 3px; /* 微调位置，防止看起来偏上 */
+}
+
+/* 4. 添加文字 "Continue" 并统一字体 */
+#scroll-down::after {
+    content: 'Continue';
+    
+    /* --- 强制统一字体 --- */
+    /* 这一长串是完全照搬你的大标题字体栈 */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Lato, Helvetica, Arial, sans-serif !important;
+    
+    font-size: 1.2rem !important; /* 稍微大一点，显得大气 */
+    font-weight: bold !important; /* 加粗，和标题一致 */
+    color: #fff !important;
+    letter-spacing: 1px; /* 字母间距 */
+    line-height: 1;
+    text-transform: none !important; /* 防止被强制大写 */
+}
+
+/* 5. 悬停交互效果 */
+#scroll-down:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+    transform: translateX(-50%) scale(1.1) !important; /* 稍微放大 */
+}
+
+
+/* --- 首页第二屏：完全定制样式 --- */
+
+/* 1. 隐藏原本的布局干扰 (强制隐藏侧边栏等) */
+.home #aside-content, 
+.home #recent-posts,
+.home .pagination,
+.home #footer {
+    display: none !important;
+}
+
+/* 2. 调整主容器，让它铺满屏幕 */
+.home #content-inner {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+/* 3. 我们的仪表盘容器 */
+#love-dashboard-full {
+    display: flex; /* 左右布局 */
+    width: 100%;
+    min-height: 100vh; /* 占满整个屏幕高度 */
+    margin: 0;
+    padding: 0;
+}
+
+/* 4. 左右面板通用样式 */
+.love-panel {
+    flex: 1; /* 左右各占 50% */
     display: flex;
     align-items: center;
     justify-content: center;
-    
-    /* 交互 */
-    z-index: 1001;
+    flex-direction: column;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    transition: all 0.5s;
+}
+
+/* 5. 左边：纯粉色背景 */
+.pink-panel {
+    background-color: #ff9a9e;
+    background-image: linear-gradient(120deg, #ff9a9e 0%, #fecfef 100%);
+}
+
+/* 6. 右边：纯蓝色背景 */
+.blue-panel {
+    background-color: #a18cd1;
+    background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+}
+
+/* 7. 内容文字样式 */
+.panel-inner h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    font-weight: 300;
+}
+
+.love-icon {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    animation: float 3s ease-in-out infinite; /* 上下浮动动画 */
+}
+
+#together-timer, #meet-timer {
+    font-size: 3rem;
+    font-weight: bold;
+    margin: 20px 0;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* 8. 交互控件样式 */
+.date-selector input {
+    padding: 10px;
+    border-radius: 30px;
+    border: none;
+    outline: none;
+    text-align: center;
+    font-size: 1rem;
+    background: rgba(255,255,255,0.9);
+}
+
+.btn-row {
+    margin-top: 15px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.btn-row button {
+    padding: 8px 20px;
+    border: 1px solid white;
+    background: transparent;
+    color: white;
+    border-radius: 20px;
     cursor: pointer;
-    transition: all 0.3s ease;
-    
-    /* --- 字体设置：跟主标题保持一致 --- */
-    /* 优先使用主题定义的全局字体变量，如果没有则用系统字体 */
-    font-family: var(--global-font-family), -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif !important;
-    text-shadow: none !important;
+    transition: 0.3s;
 }
 
-/* 3. 内容生成：图标 + Continue */
-#scroll-down::after {
-    /* \f103 是双箭头图标 */
-    content: '\f103   Continue';
-    
-    /* --- 关键：混合字体处理 --- */
-    /* 这里必须包含 Font Awesome 否则图标不显示 */
-    /* 我们把 FA 放在后面，让文字优先使用前面的系统字体 */
-    font-family: "Font Awesome 6 Free", "FontAwesome", var(--global-font-family), sans-serif !important;
-    font-weight: 900 !important; /* 图标必须加粗 */
-    
-    /* 文字样式 */
-    font-size: 18px; /* 稍微调大字号匹配标题 */
-    color: #fff;
-    letter-spacing: 1px;
-    text-transform: capitalize; /* 首字母大写 */
-    line-height: 1;
+.btn-row button:hover {
+    background: white;
+    color: #333;
 }
 
-/* 4. 悬停效果 */
-#scroll-down:hover {
-    background: rgba(255, 255, 255, 0.2) !important;
-    transform: translateX(-50%) scale(1.05);
+/* 手机端适配：上下排列 */
+@media screen and (max-width: 768px) {
+    #love-dashboard-full {
+        flex-direction: column; /* 手机上变成上下两块 */
+    }
+    .love-panel {
+        min-height: 50vh;
+    }
+}
+
+/* 简单的浮动动画 */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+    100% { transform: translateY(0px); }
+}
+
+/* --- 首页强力净化 --- */
+
+/* 1. 只要是首页，把文章列表(占位符)、侧边栏、分页器统统隐藏 */
+/* 注意：这里用 ID 选择器，权重最高，绝对能隐藏 */
+#recent-posts, 
+#aside-content, 
+#pagination, 
+.pagination { 
+    display: none !important; 
+}
+
+/* 2. 确保我们的仪表盘可见 */
+#love-dashboard-full {
+    display: flex !important; /* 强制显示 */
 }
