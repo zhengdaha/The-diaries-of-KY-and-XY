@@ -1,232 +1,321 @@
-/* --- 首页标题样式优化 --- */
+/* ============================================================
+   1. 首页全局重置 (强制全屏处理)
+   ============================================================ */
 
-/* 1. 加大副标题（打字机部分）的字号 */
-#page-header #site-subtitle {
-    font-size: 2rem !important;  /* 默认大概是 1.2rem，这里调大到 1.8 */
-
-}
-
-/* 2. 加大主标题和副标题之间的间距 */
-#page-header #site-title {
-    margin-bottom: 35px !important; /* 调整这个数字，越大间距越宽 */
-}
-
-/* 3. (可选) 如果觉得副标题太靠下，可以微调它的位置 */
-.brand {
-    padding: 10px 0 !important; /* 增加整体上下的空间 */
-}
-
-
-/* --- 首页下滑按钮：终极修复版 --- */
-
-/* 1. 彻底隐藏原来的图标和动画 */
-#scroll-down i {
-    display: none !important;
-}
-
-/* 2. 按钮容器重构 */
-#scroll-down {
-    /* --- 位置强制修复 --- */
-    position: absolute !important;
-    top: auto !important;     /* 必须把 top 设为自动，防止它把按钮锁在上面 */
-    bottom: 7.5vh !important;  /* 距离底部 15% 的屏幕高度（比像素更智能） */
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    
-    /* --- 外观设置 --- */
-    width: auto !important;
-    height: auto !important;
-    background: transparent !important;
-    border: 2px solid #fff !important; /* 边框稍微加粗一点点 */
-    border-radius: 50px;
-    padding: 12px 35px; /* 增加内边距，让按钮更大气 */
-    
-    /* --- 布局与交互 --- */
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 9999; /* 保证在最上层 */
-    transition: all 0.3s ease;
-}
-
-/* 3. 【核心修改】用纯 CSS 画一个箭头 (不再依赖字体库，解决方块问题) */
-#scroll-down::before {
-    content: ''; /* 空内容，用来画图 */
-    display: inline-block;
-    width: 10px;  /* 箭头大小 */
-    height: 10px; /* 箭头大小 */
-    
-    /* 只给右边和下边上色，形成一个直角 */
-    border-right: 3px solid #fff; 
-    border-bottom: 3px solid #fff;
-    
-    /* 旋转45度，变成向下箭头 */
-    transform: rotate(45deg); 
-    
-    margin-right: 12px; /* 箭头和文字的距离 */
-    margin-bottom: 3px; /* 微调位置，防止看起来偏上 */
-}
-
-/* 4. 添加文字 "Continue" 并统一字体 */
-#scroll-down::after {
-    content: 'Continue';
-    
-    /* --- 强制统一字体 --- */
-    /* 这一长串是完全照搬你的大标题字体栈 */
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Lato, Helvetica, Arial, sans-serif !important;
-    
-    font-size: 1.2rem !important; /* 稍微大一点，显得大气 */
-    font-weight: bold !important; /* 加粗，和标题一致 */
-    color: #fff !important;
-    letter-spacing: 1px; /* 字母间距 */
-    line-height: 1;
-    text-transform: none !important; /* 防止被强制大写 */
-}
-
-/* 5. 悬停交互效果 */
-#scroll-down:hover {
-    background: rgba(255, 255, 255, 0.2) !important;
-    transform: translateX(-50%) scale(1.1) !important; /* 稍微放大 */
-}
-
-
-/* --- 首页第二屏：完全定制样式 --- */
-
-/* 1. 隐藏原本的布局干扰 (强制隐藏侧边栏等) */
-.home #aside-content, 
-.home #recent-posts,
-.home .pagination,
-.home #footer {
-    display: none !important;
-}
-
-/* 2. 调整主容器，让它铺满屏幕 */
-.home #content-inner {
+/* 仅在首页生效，彻底打破 Butterfly 主题的宽度限制 */
+.home .layout, 
+.home #content-inner, 
+.home #page, 
+.home .recent-posts {
     max-width: 100% !important;
-    padding: 0 !important;
+    width: 100% !important;
     margin: 0 !important;
-    background: transparent !important;
+    padding: 0 !important;
     box-shadow: none !important;
+    background: transparent !important;
 }
 
-/* 3. 我们的仪表盘容器 */
-#love-dashboard-full {
-    display: flex; /* 左右布局 */
-    width: 100%;
-    min-height: 100vh; /* 占满整个屏幕高度 */
-    margin: 0;
-    padding: 0;
-}
-
-/* 4. 左右面板通用样式 */
-.love-panel {
-    flex: 1; /* 左右各占 50% */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    color: white;
-    text-align: center;
-    padding: 20px;
-    transition: all 0.5s;
-}
-
-/* 5. 左边：纯粉色背景 */
-.pink-panel {
-    background-color: #ff9a9e;
-    background-image: linear-gradient(120deg, #ff9a9e 0%, #fecfef 100%);
-}
-
-/* 6. 右边：纯蓝色背景 */
-.blue-panel {
-    background-color: #a18cd1;
-    background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
-}
-
-/* 7. 内容文字样式 */
-.panel-inner h2 {
-    font-size: 2rem;
-    margin-bottom: 20px;
-    font-weight: 300;
-}
-
-.love-icon {
-    font-size: 4rem;
-    margin-bottom: 20px;
-    animation: float 3s ease-in-out infinite; /* 上下浮动动画 */
-}
-
-#together-timer, #meet-timer {
-    font-size: 3rem;
-    font-weight: bold;
-    margin: 20px 0;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
-    font-family: 'Segoe UI', sans-serif;
-}
-
-/* 8. 交互控件样式 */
-.date-selector input {
-    padding: 10px;
-    border-radius: 30px;
-    border: none;
-    outline: none;
-    text-align: center;
-    font-size: 1rem;
-    background: rgba(255,255,255,0.9);
-}
-
-.btn-row {
-    margin-top: 15px;
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-}
-
-.btn-row button {
-    padding: 8px 20px;
-    border: 1px solid white;
-    background: transparent;
-    color: white;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.btn-row button:hover {
-    background: white;
-    color: #333;
-}
-
-/* 手机端适配：上下排列 */
-@media screen and (max-width: 768px) {
-    #love-dashboard-full {
-        flex-direction: column; /* 手机上变成上下两块 */
-    }
-    .love-panel {
-        min-height: 50vh;
-    }
-}
-
-/* 简单的浮动动画 */
-@keyframes float {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-15px); }
-    100% { transform: translateY(0px); }
-}
-
-/* --- 首页强力净化 --- */
-
-/* 1. 只要是首页，把文章列表(占位符)、侧边栏、分页器统统隐藏 */
-/* 注意：这里用 ID 选择器，权重最高，绝对能隐藏 */
-#recent-posts, 
-#aside-content, 
-#pagination, 
-.pagination { 
+/* 隐藏干扰元素：侧边栏、分页、页脚 */
+.home #aside-content, 
+.home #pagination, 
+.home #footer { 
     display: none !important; 
 }
 
-/* 2. 确保我们的仪表盘可见 */
-#love-dashboard-full {
-    display: flex !important; /* 强制显示 */
+/* 确保页面水平不抖动 */
+body.home {
+    overflow-x: hidden;
+    width: 100%;
+}
+
+/* ============================================================
+   2. 通用全屏容器样式
+   ============================================================ */
+.love-dashboard-full-screen {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+/* 分栏通用内容容器 */
+.panel-content {
+    z-index: 2;
+    padding: 20px;
+}
+
+/* ============================================================
+   3. 第二屏：左右双栏布局
+   ============================================================ */
+.love-panel-split {
+    flex: 1; /* 左右平分 */
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    text-align: center;
+    transition: all 0.5s ease;
+}
+
+/* ============================================================
+   根据图片精确还原：渐变背景样式
+   ============================================================ */
+/* 左侧：粉色渐变 (暖粉色到浅橘粉) */
+.pink-split { 
+    background: linear-gradient(180deg, #ffafbd 0%, #ffc3a0 100%) !important;
+    border-right: 1px solid rgba(255,255,255,0.2); /* 增加极细的分割线，更精致 */
+}
+/* 右侧：蓝色渐变 (天空蓝到薄荷绿) */
+.blue-split { 
+    background: linear-gradient(180deg, #a1c4fd 0%, #c2e9fb 100%) !important;
+}
+
+/* 图标动画 */
+.love-icon-large { 
+    font-size: clamp(3rem, 10vw, 5rem); /* 响应式字体大小 */
+    margin-bottom: 20px; 
+    animation: float 3.5s ease-in-out infinite; 
+}
+
+/* 计时器字体 */
+#together-timer, #meet-timer { 
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-weight: 800;
+    text-shadow: 2px 4px 10px rgba(0,0,0,0.1);
+}
+
+#together-timer { font-size: clamp(1.5rem, 5vw, 2.5rem); margin: 15px 0; }
+#meet-timer { font-size: clamp(1.8rem, 6vw, 3rem); margin: 20px 0; cursor: pointer; }
+
+/* ============================================================
+   4. 第三屏：未完待续 (示例样式)
+   ============================================================ */
+#section-3 {
+    background: #2c3e50; /* 深色背景 */
+    color: #ecf0f1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ============================================================
+   5. 日历与输入框美化 (Flatpickr)
+   ============================================================ */
+.modern-date-wrap {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#modern-date-input {
+    /* 字体设置 */
+    color: #053364 !important;         /* 字体颜色：纯白 */
+    font-size: 1rem !important;      /* 字体大小：稍微放大 */
+    font-weight: 600 !important;       /* 字体粗细：中等加粗 */
+    font-family: inherit;
+    
+    /* 背景与边框 */
+    background: rgba(255, 255, 255, 0.25) !important; /* 增加透明底色，更像图片效果 */
+    border: 1.5px solid rgba(255, 255, 255, 0.5) !important; /* 半透明白边框 */
+    border-radius: 50px !important;    /* 药丸型胶囊 */
+    
+    /* 间距控制 */
+    padding: 8px 20px !important;
+    width: 180px !important;           /* 宽度适中 */
+    text-align: center !important;
+    
+    /* 移除原生外观 */
+    outline: none !important;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+/* 鼠标悬停在日期框上的效果 */
+#modern-date-input:hover {
+    background: rgba(255, 255, 255, 0.3) !important;
+    transform: scale(1.05) !important;
+    box-shadow: 0 0 15px rgba(255,255,255,0.2);
+}
+
+#modern-date-input:focus {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: white;
+}
+
+/* 2. Clear Date 按钮 (下方的小字) */
+/* 注意：这里改用了 .btn-text-only 类选择器，以匹配 HTML */
+.btn-text-only {
+    display: inline-block !important;
+    margin-top: 15px !important;       /* 增加与上方日期框的间距 */
+    background: transparent !important; /* 确保背景透明 */
+    border: none !important;            /* 去掉边框 */
+    
+    /* 字体设置 */
+    color: rgba(255, 255, 255, 0.65) !important; /* 65%透明度，比输入框更暗一点 */
+    font-size: 0.85rem !important;               /* 小字号 */
+    font-weight: 500 !important;
+    font-family: inherit;
+    
+    text-decoration: underline !important;       /* 保留主要下划线 */
+    text-decoration-thickness: 1px !important;   /* 下划线细一点 */
+    text-underline-offset: 4px !important;       /* 下划线跟文字拉开点距离 */
+    
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* 悬停在 Clear Date 上的效果 */
+.btn-text-only:hover {
+    color: #ffffff !important;                   /* 悬停变纯白 */
+    text-shadow: 0 0 8px rgba(255,255,255,0.6);  /* 文字发光 */
+    transform: translateY(-2px);                 /* 微微上浮 */
+}
+
+/* ============================================================
+   6. 统一的 Continue 按钮 (向下箭头)
+   ============================================================ */
+
+/* 首页第一屏的主题按钮补充样式 */
+/* ============================================================
+   统一 Continue 按钮样式 (完全匹配图片)
+   ============================================================ */
+
+/* 同时作用于：主题自带的首屏按钮 (#scroll-down) 
+   以及我们自定义的后续按钮 (#scroll-down-2, #scroll-down-3...) */
+   #scroll-down, 
+   #scroll-down-2,
+   #scroll-down-3 {
+       /* 定位逻辑 */
+       position: absolute !important;
+       bottom: 7.5vh !important; /* 距离底部 7.5% */
+       left: 50% !important;
+       transform: translateX(-50%) !important;
+       
+       /* 形状与边框 */
+       display: flex !important;
+       align-items: center !important;
+       justify-content: center !important;
+       width: auto !important;
+       height: auto !important;
+       padding: 10px 32px !important;
+       border: 2.5px solid #ffffff !important; /* 白色粗边框 */
+       border-radius: 100px !important; /* 药丸形状 */
+       
+       /* 背景与特效 */
+       background: rgba(255, 255, 255, 0.1) !important; /* 轻微透明背景 */
+       backdrop-filter: blur(4px); /* 毛玻璃效果 */
+       text-decoration: none !important;
+       transition: all 0.3s ease-out !important;
+       z-index: 100;
+       cursor: pointer;
+   }
+   
+   /* 悬停状态 */
+   #scroll-down:hover, 
+   #scroll-down-2:hover,
+   #scroll-down-3:hover {
+       background: rgba(255, 255, 255, 0.3) !important;
+       transform: translateX(-50%) scale(1.05) !important;
+       box-shadow: 0 0 15px rgba(255,255,255,0.2);
+   }
+   
+   /* 绘制左侧的 V 型图标 */
+   #scroll-down::before, 
+   #scroll-down-2::before,
+   #scroll-down-3::before {
+       content: '' !important;
+       display: inline-block !important;
+       width: 10px !important;
+       height: 10px !important;
+       border-right: 3px solid #fff !important;
+       border-bottom: 3px solid #fff !important;
+       transform: rotate(45deg) !important; /* 旋转45度形成下箭头 */
+       margin-right: 12px !important;
+       margin-bottom: 4px !important; /* 微调对齐 */
+   }
+   
+   /* 按钮文字样式 */
+   #scroll-down::after, 
+   #scroll-down-2::after,
+   #scroll-down-3::after {
+       content: 'Continue' !important;
+       color: #ffffff !important;
+       font-size: 1.2rem !important;
+       font-weight: 800 !important; /* 加粗 */
+       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+       line-height: 1 !important;
+       text-transform: none !important;
+   }
+   
+   /* 彻底隐藏 Butterfly 原有的向下图标 i 标签 */
+   #scroll-down i, 
+   #scroll-down-2 i { 
+       display: none !important; 
+   }
+   
+   /* 适配移动端：稍微缩小按钮避免占据过多空间 */
+   @media screen and (max-width: 768px) {
+       #scroll-down, #scroll-down-2, #scroll-down-3 {
+           padding: 8px 24px !important;
+           bottom: 5vh !important; /* 手机端稍微靠上一点 */
+       }
+       #scroll-down::after, #scroll-down-2::after, #scroll-down-3::after {
+           font-size: 1rem !important;
+       }
+       #modern-date-input {
+        font-size: 0.95rem !important;
+        width: 150px !important;
+       }
+       #clear-date-btn {
+        font-size: 0.75rem !important;
+       }
+
+   }
+   
+
+/* ============================================================
+   7. 响应式适配 (手机端)
+   ============================================================ */
+@media screen and (max-width: 768px) {
+    .love-dashboard-full-screen {
+        flex-direction: column; /* 手机端变为上下堆叠 */
+        height: auto; /* 允许根据内容伸展 */
+        min-height: 100vh;
+    }
+
+    .love-panel-split {
+        width: 100%;
+        height: 50vh; /* 手机端每一块占半屏高 */
+        padding: 40px 10px;
+    }
+
+    #scroll-down-2 {
+        display: none; /* 手机端通常靠滑动，可隐藏第二个按钮避免遮挡 */
+    }
+    
+    #section-3 {
+        height: 100vh;
+    }
+}
+
+/* ============================================================
+   8. 动画定义
+   ============================================================ */
+@keyframes float { 
+    0% { transform: translateY(0px); } 
+    50% { transform: translateY(-20px); } 
+    100% { transform: translateY(0px); } 
+}
+
+/* Flatpickr 选中颜色 */
+.flatpickr-day.selected { 
+    background: #ff9a9e !important; 
+    border-color: #ff9a9e !important; 
 }
