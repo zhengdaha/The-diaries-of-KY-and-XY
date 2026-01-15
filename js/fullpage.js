@@ -50,10 +50,14 @@
      const renderHTML = (container) => {
         container.innerHTML = `
             <div id="section-2" class="love-dashboard-full-screen">
+                <!-- 左侧面板 -->
                 <div class="love-panel-split pink-split">
                     <div class="panel-content">
                         <div class="align-slot-icon">
-                            <div class="love-icon-large">❤️</div>
+                            <!-- 修改点：图片会被 CSS 自动缩放 -->
+                            <div class="love-icon-large">
+                                <img src="./img/heart.jpg" alt="Heart">
+                            </div>
                         </div>
                         
                         <div class="align-slot-title">
@@ -63,13 +67,12 @@
                         <div class="align-slot-timer">
                             <div id="together-timer">Calculating...</div>
                         </div>
-
                         <div class="align-slot-footer">
-                        <p class="since-text" style="font-size:1rem; font-weight:700; margin-top:5px;">Since ${CONFIG.startDate.split('T')[0]}</p>
+                            <p class="since-text">Since ${CONFIG.startDate.split('T')[0]}</p>
                         </div>
                     </div>
                 </div>
-
+                <!-- 右侧面板 -->
                 <div class="love-panel-split blue-split">
                     <div class="panel-content">
                         <div class="align-slot-icon">
@@ -83,7 +86,6 @@
                         <div class="align-slot-timer">
                             <div id="meet-timer" onclick="openCalendar()">Click to Set Date</div>
                         </div>
-
                         <div class="align-slot-footer">
                             <div class="modern-date-wrap">
                                 <input type="text" id="modern-date-input" placeholder="📅 Select Date">
