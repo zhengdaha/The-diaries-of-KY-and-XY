@@ -1,5 +1,3 @@
-/* source/css/custom.css */
-
 /* ============================================================
    1. 首页全局重置 (强制全屏处理)
    ============================================================ */
@@ -102,25 +100,13 @@ body.home {
     width: 100%;
 }
 
-/* 4. 底部层：Since... / Target Date */
+/* 4. 底部层：Since... / Input Box */
 /* 注意：这里使用 flex-start 让它们从这一层的顶部开始对齐 */
-.align-slot-footer1 {
+.align-slot-footer {
     min-height: 120px;
     display: flex;
     flex-direction: column;
-    color: #c96b18; 
-    align-items: center;
-    justify-content: flex-start; 
-    padding-top: 10px; /* 顶部留一点空隙 */
-    width: 100%;
-    font-weight: 700 !important;
-    font-size: 1.1rem !important;
-}
-.align-slot-footer2 {
-    min-height: 120px;
-    display: flex;
-    flex-direction: column;
-    color: #124bd0; 
+    color: #e4793b;
     align-items: center;
     justify-content: flex-start; 
     padding-top: 10px; /* 顶部留一点空隙 */
@@ -175,7 +161,7 @@ body.home {
 }
 
 #together-timer { font-size: clamp(1.5rem, 5vw, 2.5rem); }
-#meet-timer { font-size: clamp(1.8rem, 6vw, 3rem); }
+#meet-timer { font-size: clamp(1.8rem, 6vw, 3rem); cursor: pointer; }
 
 /* ============================================================
    4. 第三屏：未完待续
@@ -190,7 +176,69 @@ body.home {
 }
 
 /* ============================================================
-   5. 统一的 Continue 按钮
+   5. 日历与输入框美化 (Flatpickr)
+   ============================================================ */
+.modern-date-wrap {
+    /* 移除 margin-top，由 slot padding 控制 */
+    margin-top: 0;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#modern-date-input {
+    color: #053364 !important;
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    font-family: inherit;
+    background: rgba(255, 255, 255, 0.25) !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.5) !important;
+    border-radius: 50px !important;
+    padding: 8px 20px !important;
+    width: 180px !important;
+    text-align: center !important;
+    outline: none !important;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#modern-date-input:hover {
+    background: rgba(255, 255, 255, 0.3) !important;
+    transform: scale(1.05) !important;
+    box-shadow: 0 0 15px rgba(255,255,255,0.2);
+}
+
+#modern-date-input:focus {
+    background: rgba(255, 255, 255, 0.3);
+    border-color: white;
+}
+
+/* Clear Date 按钮 */
+.btn-text-only {
+    display: inline-block !important;
+    margin-top: 15px !important;
+    background: transparent !important;
+    border: none !important;
+    color: rgba(255, 255, 255, 0.65) !important;
+    font-size: 0.85rem !important;
+    font-weight: 500 !important;
+    font-family: inherit;
+    text-decoration: underline !important;
+    text-decoration-thickness: 1px !important;
+    text-underline-offset: 4px !important;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-text-only:hover {
+    color: #ffffff !important;
+    text-shadow: 0 0 8px rgba(255,255,255,0.6);
+    transform: translateY(-2px);
+}
+
+/* ============================================================
+   6. 统一的 Continue 按钮
    ============================================================ */
 #scroll-down, 
 #scroll-down-2,
@@ -260,10 +308,17 @@ body.home {
     #scroll-down::after, #scroll-down-2::after, #scroll-down-3::after {
         font-size: 1rem !important;
     }
+    #modern-date-input {
+        font-size: 0.95rem !important;
+        width: 150px !important;
+    }
+    #clear-date-btn {
+        font-size: 0.75rem !important;
+    }
 }
 
 /* ============================================================
-   6. 响应式适配 (手机端)
+   7. 响应式适配 (手机端)
    ============================================================ */
 @media screen and (max-width: 768px) {
     .love-dashboard-full-screen {
@@ -286,10 +341,15 @@ body.home {
 }
 
 /* ============================================================
-   7. 动画定义
+   8. 动画定义
    ============================================================ */
 @keyframes float { 
     0% { transform: translateY(0px); } 
     50% { transform: translateY(-20px); } 
     100% { transform: translateY(0px); } 
+}
+
+.flatpickr-day.selected { 
+    background: #ff9a9e !important; 
+    border-color: #ff9a9e !important; 
 }

@@ -6,7 +6,6 @@
      */
     const CONFIG = {
         startDate: "2026-01-01T00:00:00", // 在一起的时间
-        meetDate: "2026-02-14T00:00:00",  // 【在此处修改】下次见面的时间 (格式：YYYY-MM-DDTHH:mm:ss)
         repoName: "/The-diaries-of-KY-and-XY/", // 你的 GitHub 仓库二级目录名
     };
 
@@ -46,17 +45,16 @@
     };
 
     /**
-     * 3. HTML 渲染 (结构更新：移除交互组件，改为静态显示)
+     * 3. HTML 渲染 (结构更新：使用 Align Slots 对齐)
      */
      const renderHTML = (container) => {
-        // 简单格式化日期，只取 YYYY-MM-DD 部分用于显示
-        const displayDate = CONFIG.meetDate.split('T')[0];
-
         container.innerHTML = `
             <div id="section-2" class="love-dashboard-full-screen">
+                <!-- 左侧面板 -->
                 <div class="love-panel-split pink-split">
                     <div class="panel-content">
                         <div class="align-slot-icon">
+                            <!-- 修改点：图片会被 CSS 自动缩放 -->
                             <div class="love-icon-large">
                                 <img src="./img/heart.jpg" alt="Heart">
                             </div>
@@ -69,11 +67,12 @@
                         <div class="align-slot-timer">
                             <div id="together-timer">Calculating...</div>
                         </div>
-                        <div class="align-slot-footer1">
+                        <div class="align-slot-footer">
                             <p class="since-text">Since ${CONFIG.startDate.split('T')[0]}</p>
                         </div>
                     </div>
                 </div>
+                <!-- 右侧面板 -->
                 <div class="love-panel-split blue-split">
                     <div class="panel-content">
                         <div class="align-slot-icon">
@@ -85,10 +84,13 @@
                         </div>
                         
                         <div class="align-slot-timer">
-                            <div id="meet-timer">Calculating...</div>
+                            <div id="meet-timer" onclick="openCalendar()">Click to Set Date</div>
                         </div>
-                        <div class="align-slot-footer2">
-                            <p class="since-text">Target: ${displayDate}</p>
+                        <div class="align-slot-footer">
+                            <div class="modern-date-wrap">
+                                <input type="text" id="modern-date-input" placeholder="📅 Select Date">
+                                <button id="clear-date-btn" onclick="clearMeetDate()" class="btn-text-only">Clear Date</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -107,9 +109,22 @@
      * 4. 功能逻辑控制
      */
     const startLogic = () => {
+        // --- 初始化日历 (Flatpickr) ---
+        if (typeof flatpickr !== 'undefined') {
+            flatpickr("#modern-date-input", {
+                dateFormat: "Y-m-d",
+                minDate: "today",
+                disableMobile: false,
+                defaultDate: localStorage.getItem('meetDate') || null,
+                onChange: function(selectedDates, dateStr) {
+                    localStorage.setItem('meetDate', dateStr);
+                    updateMeetTimer();
+                }
+            });
+        }
+
         // --- 计时器循环 ---
         const timerLoop = setInterval(() => {
-            // 如果页面已经切换离开，停止计时器
             if (!document.getElementById('together-timer')) {
                 clearInterval(timerLoop);
                 return;
@@ -118,7 +133,6 @@
             updateMeetTimer();
         }, 1000);
 
-        // 立即执行一次
         updateTogetherTimer();
         updateMeetTimer();
     };
@@ -142,36 +156,42 @@
         }
     };
 
-    const updateMeetTimer = () => {
+    window.updateMeetTimer = function() {
+        const saved = localStorage.getItem('meetDate');
         const display = document.getElementById("meet-timer");
         if (!display) return;
 
-        // 直接使用配置中的日期
-        const targetStr = CONFIG.meetDate;
-        
-        if (!targetStr) {
+        if (!saved) {
             display.innerHTML = "📅 Not Set";
             return;
         }
 
-        const target = new Date(targetStr);
+        const target = new Date(saved + "T00:00:00");
         const now = new Date();
-        target.setHours(0, 0, 0, 0);
-        now.setHours(0, 0, 0, 0);
+        target.setHours(23, 59, 59);
+        
         const diff = target - now;
         const d = Math.floor(diff / (1000 * 60 * 60 * 24));
 
-        // 简单的状态判断
         if (diff < 0) {
-            // 如果日期已过
             display.innerHTML = "🎉 Reunited!";
         } else if (d === 0) {
-            // 如果是当天
-            display.innerHTML = "🎉 Today's the day!!!";
+            display.innerHTML = "🎉 It's Today!";
         } else {
-            // 显示剩余天数
             display.innerHTML = `${d} days left`;
         }
+    };
+
+    window.openCalendar = function() {
+        const input = document.querySelector("#modern-date-input");
+        if (input && input._flatpickr) input._flatpickr.open();
+    };
+
+    window.clearMeetDate = function() {
+        localStorage.removeItem('meetDate');
+        const input = document.querySelector("#modern-date-input");
+        if (input && input._flatpickr) input._flatpickr.clear();
+        updateMeetTimer();
     };
 
     /**
