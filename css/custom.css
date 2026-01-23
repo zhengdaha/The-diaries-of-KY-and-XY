@@ -196,9 +196,8 @@ body.home {
     
     /* 【修改】大幅调大标题字体 */
     /* 解释：最小 3rem，随屏幕变大至 6rem */
-    font-size: clamp(1rem, 6vw, 6rem);
-    
-    color: #fff;
+    font-size: clamp(1rem, 6vw, 3rem);
+
     font-family: 'Inter', sans-serif;
     font-weight: 700;
     text-shadow: 0 4px 20px rgba(0,0,0,0.8);
