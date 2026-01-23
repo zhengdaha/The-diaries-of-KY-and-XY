@@ -187,7 +187,7 @@ body.home {
     text-align: center;
     width: 100%;
     pointer-events: none; /* 让鼠标穿透标题去点击照片 */
-    color: #6197e8;
+    color: #e9f6fe;
     font-size: 2rem;
     font-weight:10rem !important;
 }
@@ -210,6 +210,8 @@ body.home {
     /* 默认稍微暗一点，鼠标移入变亮 */
     filter: brightness(0.5);
     transition: filter 0.6s ease;
+    z-index: auto; 
+    position: relative;
 }
 
 .photo-wall-section:hover .photo-wall-container {
@@ -230,6 +232,7 @@ body.home {
     transform: rotate(var(--rotate)); /* JS生成的随机角度 */
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     cursor: pointer;
+    z-index: 1;
 }
 
 .memory-photo-item:hover {
