@@ -208,7 +208,7 @@ body.home {
     align-content: center; /* 垂直居中 */
     
     /* 默认稍微暗一点，鼠标移入变亮 */
-    filter: brightness(0.7);
+    filter: brightness(0.5);
     transition: filter 0.6s ease;
 }
 
@@ -233,7 +233,7 @@ body.home {
 }
 
 .memory-photo-item:hover {
-    transform: scale(1.15) rotate(0deg) !important; /* 悬停放大回正 */
+    transform: scale(2) rotate(0deg) !important; /* 悬停放大回正 */
     z-index: 15;
     box-shadow: 0 20px 40px rgba(0,0,0,0.6);
     border-color: #fff;
