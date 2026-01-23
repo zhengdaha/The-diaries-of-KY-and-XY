@@ -180,29 +180,16 @@ body.home {
 /* 标题容器：绝对居中，层级最高 */
 .photo-wall-title {
     position: absolute;
-    top: 50%;
+    top: 10%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translateX(-50%);
     z-index: 10;
     text-align: center;
     width: 100%;
     pointer-events: none; /* 让鼠标穿透标题去点击照片 */
 }
 
-.photo-wall-title h2 {
-    display: inline-block;
-    font-size: clamp(1.8rem, 4vw, 3.5rem);
-    color: #fff;
-    font-family: 'Inter', sans-serif;
-    font-weight: 700;
-    text-shadow: 0 4px 20px rgba(0,0,0,0.8);
-    margin: 0;
-    background: rgba(0, 0, 0, 0.4);
-    padding: 15px 40px;
-    border-radius: 100px;
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255,255,255,0.15);
-}
+
 
 /* 照片网格 */
 .photo-wall-container {
