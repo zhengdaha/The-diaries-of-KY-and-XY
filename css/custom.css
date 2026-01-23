@@ -188,7 +188,7 @@ body.home {
     width: 100%;
     pointer-events: none; /* 让鼠标穿透标题去点击照片 */
     color: #6197e8;
-    font-size: large;
+    font-size: 7000;
     font-weight:10rem !important;
 }
 
