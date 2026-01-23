@@ -192,9 +192,9 @@ body.home {
     font-weight:10rem !important;
 }
 .photo-wall-title h2 {
-    font-size: 1.5rem;
+    font-size: 2rem;
 
-    color: rgb(210, 229, 253);
+    color: rgb(163, 192, 227);
     z-index: 15;
 
 }
