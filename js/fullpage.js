@@ -6,8 +6,21 @@
      */
     const CONFIG = {
         startDate: "2026-01-01T00:00:00", // 在一起的时间
-        meetDate: "2026-02-14T00:00:00",  // 【在此处修改】下次见面的时间 (格式：YYYY-MM-DDTHH:mm:ss)
-        repoName: "/The-diaries-of-KY-and-XY/", // 你的 GitHub 仓库二级目录名
+        meetDate: "2026-02-14T00:00:00",  // 下次见面的时间
+        repoName: "/The-diaries-of-KY-and-XY/", 
+        
+        // 【在此处添加照片路径】
+        // 建议使用 6-8 张横竖搭配的照片，以获得最佳效果
+        photoList: [
+            "./img/New Year's Eve.jpg",
+            "./img/Yuexiu_Park1.jpg", 
+            "./img/Yuexiu_Park2.jpg",
+            "./img/Yuexiu_Park3.jpg",
+            "./img/Cat1.jpg",
+            "./img/IMG_0459.jpg",
+            "./img/Shipai_Park.jpg",
+            "./img/Internet cafe.jpg"
+        ]
     };
 
     // 检测是否在首页
@@ -46,11 +59,19 @@
     };
 
     /**
-     * 3. HTML 渲染 (结构更新：移除交互组件，改为静态显示)
+     * 3. HTML 渲染
      */
      const renderHTML = (container) => {
-        // 简单格式化日期，只取 YYYY-MM-DD 部分用于显示
         const displayDate = CONFIG.meetDate.split('T')[0];
+
+        // 生成照片墙的 HTML 字符串
+        const photosHTML = CONFIG.photoList.map((src, index) => {
+            // 随机给照片添加一点旋转角度，增加随意感 (-10度 到 10度)
+            const randomRotate = Math.floor(Math.random() * 20) - 10; 
+            return `<div class="memory-photo-item" style="--rotate:${randomRotate}deg">
+                        <img src="${src}" loading="lazy" alt="Memory ${index + 1}">
+                    </div>`;
+        }).join('');
 
         container.innerHTML = `
             <div id="section-2" class="love-dashboard-full-screen">
@@ -61,11 +82,9 @@
                                 <img src="./img/heart.jpg" alt="Heart">
                             </div>
                         </div>
-                        
                         <div class="align-slot-title">
                             <h2>We have been together for</h2>
                         </div>
-                        
                         <div class="align-slot-timer">
                             <div id="together-timer">Calculating...</div>
                         </div>
@@ -79,11 +98,9 @@
                         <div class="align-slot-icon">
                             <div class="love-icon-large">✈️</div>
                         </div>
-                        
                         <div class="align-slot-title">
                             <h2>Time Until Next Meeting</h2>
                         </div>
-                        
                         <div class="align-slot-timer">
                             <div id="meet-timer">Calculating...</div>
                         </div>
@@ -94,10 +111,25 @@
                 </div>
                 <a href="#section-3" id="scroll-down-2"></a>
             </div>
-            <div id="section-3" class="love-dashboard-full-screen" style="background: #2c3e50;">
+
+            <div id="section-3" class="love-dashboard-full-screen photo-wall-section">
+                <div class="photo-wall-overlay"></div>
+                
+                <div class="photo-wall-container">
+                    ${photosHTML}
+                </div>
+
+                <div class="photo-wall-title">
+                    <h2>These are our memories.</h2>
+                </div>
+
+                <a href="#section-4" id="scroll-down-3"></a>
+            </div>
+
+            <div id="section-4" class="love-dashboard-full-screen" style="background: #2c3e50;">
                 <div class="panel-content" style="color:white; width:100%; text-align:center;">
                     <h2 style="font-size:3rem">To be continued...</h2>
-                    <p style="font-size:1.2rem; opacity:0.7">Space reserved for your Photo Gallery or Journal</p>
+                    <p style="font-size:1.2rem; opacity:0.7">Space reserved for future stories.</p>
                 </div>
             </div>
         `;
@@ -107,9 +139,7 @@
      * 4. 功能逻辑控制
      */
     const startLogic = () => {
-        // --- 计时器循环 ---
         const timerLoop = setInterval(() => {
-            // 如果页面已经切换离开，停止计时器
             if (!document.getElementById('together-timer')) {
                 clearInterval(timerLoop);
                 return;
@@ -118,9 +148,22 @@
             updateMeetTimer();
         }, 1000);
 
-        // 立即执行一次
         updateTogetherTimer();
         updateMeetTimer();
+        
+        // 简单的平滑滚动修正
+        document.querySelectorAll('a[id^="scroll-down"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if(targetElement){
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
     };
 
     /**
@@ -146,7 +189,6 @@
         const display = document.getElementById("meet-timer");
         if (!display) return;
 
-        // 直接使用配置中的日期
         const targetStr = CONFIG.meetDate;
         
         if (!targetStr) {
@@ -161,15 +203,11 @@
         const diff = target - now;
         const d = Math.floor(diff / (1000 * 60 * 60 * 24));
 
-        // 简单的状态判断
         if (diff < 0) {
-            // 如果日期已过
             display.innerHTML = "🎉 Reunited!";
         } else if (d === 0) {
-            // 如果是当天
             display.innerHTML = "🎉 Today's the day!!!";
         } else {
-            // 显示剩余天数
             display.innerHTML = `${d} days left`;
         }
     };

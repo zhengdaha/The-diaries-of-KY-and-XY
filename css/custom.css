@@ -46,9 +46,8 @@ body.home {
 /* 分栏通用内容容器 */
 .panel-content {
     z-index: 2;
-    padding: 0 20px; /* 左右保留间距 */
+    padding: 0 20px;
     width: 100%;
-    /* 修改：使用 Flex 列布局，但通过内部 Slot 控制高度，不再依赖 justify-content: center */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -70,12 +69,9 @@ body.home {
     transition: all 0.5s ease;
 }
 
-/* ============================================================
-   关键修改：对齐槽位 (Alignment Slots)
-   通过给每一行内容设定统一的最小高度，强制左右对齐
-   ============================================================ */
+/* --- 对齐槽位 (Alignment Slots) --- */
 
-/* 1. 图标层：预留足够高度给浮动动画 */
+/* 1. 图标层 */
 .align-slot-icon {
     min-height: 140px; 
     display: flex;
@@ -84,26 +80,25 @@ body.home {
     width: 100%;
 }
 
-/* 2. 标题层：We have been... / Time Until... */
+/* 2. 标题层 */
 .align-slot-title {
     min-height: 60px;
     display: flex;
-    align-items: center; /* 垂直居中 */
+    align-items: center;
     justify-content: center;
     width: 100%;
 }
 
-/* 3. 计时器层：数字显示区域 */
+/* 3. 计时器层 */
 .align-slot-timer {
-    min-height: 120px; /* 给大字体留足空间 */
+    min-height: 120px;
     display: flex;
-    align-items: center; /* 垂直居中 */
+    align-items: center;
     justify-content: center;
     width: 100%;
 }
 
-/* 4. 底部层：Since... / Target Date */
-/* 注意：这里使用 flex-start 让它们从这一层的顶部开始对齐 */
+/* 4. 底部层 */
 .align-slot-footer1 {
     min-height: 120px;
     display: flex;
@@ -111,7 +106,7 @@ body.home {
     color: #c96b18; 
     align-items: center;
     justify-content: flex-start; 
-    padding-top: 10px; /* 顶部留一点空隙 */
+    padding-top: 10px;
     width: 100%;
     font-weight: 700 !important;
     font-size: 1.1rem !important;
@@ -123,31 +118,24 @@ body.home {
     color: #124bd0; 
     align-items: center;
     justify-content: flex-start; 
-    padding-top: 10px; /* 顶部留一点空隙 */
+    padding-top: 10px;
     width: 100%;
     font-weight: 700 !important;
     font-size: 1.1rem !important;
 }
 
-
-/* ============================================================
-   根据图片精确还原：渐变背景样式
-   ============================================================ */
-/* 左侧：粉色渐变 */
+/* --- 背景与组件样式 --- */
 .pink-split { 
     background: linear-gradient(180deg, #ffafbd 0%, #ffc3a0 100%) !important;
     border-right: 1px solid rgba(255,255,255,0.2);
 }
-/* 右侧：蓝色渐变 */
 .blue-split { 
     background: linear-gradient(180deg, #a1c4fd 0%, #c2e9fb 100%) !important;
 }
 
 /* 图标动画 */
 .love-icon-large {
-    /* 如果是文字/Emoji */
     font-size: clamp(3rem, 8vw, 5rem);
-    /* 容器控制 */
     width: 120px; 
     height: 120px;
     display: flex;
@@ -156,13 +144,13 @@ body.home {
     margin: 0;
     animation: float 3.5s ease-in-out infinite;
 }
-/* 核心修改：强制限制图片大小 */
+
 .love-icon-large img {
     max-width: 100%;
     max-height: 100%;
-    object-fit: contain; /* 保持比例 */
-    border-radius: 20px; /* 如果需要圆角可以保留 */
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1); /* 增加一点阴影更有质感 */
+    object-fit: contain;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
 
 /* 计时器字体 */
@@ -170,7 +158,6 @@ body.home {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     font-weight: 800;
     text-shadow: 2px 4px 10px rgba(0,0,0,0.1);
-    /* 移除 margin，由 slot 容器控制 */
     margin: 0;
 }
 
@@ -178,9 +165,103 @@ body.home {
 #meet-timer { font-size: clamp(1.8rem, 6vw, 3rem); }
 
 /* ============================================================
-   4. 第三屏：未完待续
+   4. 第三屏：照片墙样式 (NEW)
    ============================================================ */
-#section-3 {
+/* 容器 */
+.photo-wall-section {
+    position: relative;
+    background: #1a1a1a; /* 深色背景衬托 */
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* 标题容器：绝对居中，层级最高 */
+.photo-wall-title {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    text-align: center;
+    width: 100%;
+    pointer-events: none; /* 让鼠标穿透标题去点击照片 */
+}
+
+.photo-wall-title h2 {
+    display: inline-block;
+    font-size: clamp(1.8rem, 4vw, 3.5rem);
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.8);
+    margin: 0;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 15px 40px;
+    border-radius: 100px;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.15);
+}
+
+/* 照片网格 */
+.photo-wall-container {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    /* 自动填充列，保证分布均匀 */
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
+    grid-auto-rows: 280px;
+    gap: 30px;
+    padding: 40px;
+    box-sizing: border-box;
+    align-content: center; /* 垂直居中 */
+    
+    /* 默认稍微暗一点，鼠标移入变亮 */
+    filter: brightness(0.7);
+    transition: filter 0.6s ease;
+}
+
+.photo-wall-section:hover .photo-wall-container {
+    filter: brightness(1);
+}
+
+/* 单张照片 (拍立得效果) */
+.memory-photo-item {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 4px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    border: 8px solid #fdfdfd; 
+    border-bottom: 25px solid #fdfdfd; /* 底部加厚模仿拍立得 */
+    background: #fdfdfd;
+    transform: rotate(var(--rotate)); /* JS生成的随机角度 */
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    cursor: pointer;
+}
+
+.memory-photo-item:hover {
+    transform: scale(1.15) rotate(0deg) !important; /* 悬停放大回正 */
+    z-index: 15;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+    border-color: #fff;
+}
+
+.memory-photo-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 2px;
+}
+
+/* ============================================================
+   5. 第四屏：结尾页样式 (ID Updated)
+   ============================================================ */
+/* 注意：这里ID从 section-3 改为了 section-4 */
+#section-4 {
     background: #2c3e50;
     color: #ecf0f1;
     display: flex;
@@ -190,11 +271,11 @@ body.home {
 }
 
 /* ============================================================
-   5. 统一的 Continue 按钮
+   6. 统一的 Continue 按钮
    ============================================================ */
 #scroll-down, 
 #scroll-down-2,
-#scroll-down-3 {
+#scroll-down-3 { /* 确保 scroll-down-3 包含在内 */
     position: absolute !important;
     bottom: 7.5vh !important;
     left: 50% !important;
@@ -250,20 +331,11 @@ body.home {
 }
 
 #scroll-down i, 
-#scroll-down-2 i { display: none !important; }
-
-@media screen and (max-width: 768px) {
-    #scroll-down, #scroll-down-2, #scroll-down-3 {
-        padding: 8px 24px !important;
-        bottom: 5vh !important;
-    }
-    #scroll-down::after, #scroll-down-2::after, #scroll-down-3::after {
-        font-size: 1rem !important;
-    }
-}
+#scroll-down-2 i,
+#scroll-down-3 i { display: none !important; }
 
 /* ============================================================
-   6. 响应式适配 (手机端)
+   7. 响应式适配 (手机端)
    ============================================================ */
 @media screen and (max-width: 768px) {
     .love-dashboard-full-screen {
@@ -276,17 +348,45 @@ body.home {
         height: 50vh;
         padding: 20px 10px;
     }
-    /* 手机上为了美观，减小 slot 高度 */
+    
+    /* 手机端 Slot 高度调整 */
     .align-slot-icon { min-height: 100px; }
     .align-slot-timer { min-height: 80px; }
-    .align-slot-footer { min-height: 80px; }
+    .align-slot-footer1, .align-slot-footer2 { min-height: 80px; }
     
-    #scroll-down-2 { display: none; }
-    #section-3 { height: 100vh; }
+    /* 按钮位置调整 */
+    #scroll-down, #scroll-down-2, #scroll-down-3 {
+        padding: 8px 24px !important;
+        bottom: 5vh !important;
+    }
+    #scroll-down::after, #scroll-down-2::after, #scroll-down-3::after {
+        font-size: 1rem !important;
+    }
+    
+    /* 手机端隐藏部分多余按钮，只保留最后一个或根据需要显示 */
+    /* 这里你可以选择是否在手机上隐藏中间页面的按钮以避免遮挡内容 */
+    /* #scroll-down-2 { display: none !important; } */
+
+    /* 照片墙手机适配 */
+    .photo-wall-container {
+        grid-template-columns: repeat(2, 1fr); /* 强制两列 */
+        grid-auto-rows: 180px;
+        gap: 15px;
+        padding: 20px;
+    }
+    
+    .photo-wall-title h2 {
+        font-size: 1.5rem;
+        padding: 10px 20px;
+        width: 85%;
+    }
+    
+    /* 结尾页适配 */
+    #section-4 { height: 100vh; }
 }
 
 /* ============================================================
-   7. 动画定义
+   8. 动画定义
    ============================================================ */
 @keyframes float { 
     0% { transform: translateY(0px); } 
