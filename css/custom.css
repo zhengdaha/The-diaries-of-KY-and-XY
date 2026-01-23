@@ -170,7 +170,7 @@ body.home {
 /* 容器 */
 .photo-wall-section {
     position: relative;
-    background: #1a1a1a; /* 深色背景衬托 */
+    background: #363636; /* 深色背景衬托 */
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -180,13 +180,16 @@ body.home {
 /* 标题容器：绝对居中，层级最高 */
 .photo-wall-title {
     position: absolute;
-    top: 10%;
+    top: 7%;
     left: 50%;
     transform: translateX(-50%);
     z-index: 10;
     text-align: center;
     width: 100%;
     pointer-events: none; /* 让鼠标穿透标题去点击照片 */
+    color: #124bd0;
+    font-size: large;
+    font-weight:5rem !important;
 }
 
 
