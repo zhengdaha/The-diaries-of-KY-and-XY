@@ -188,12 +188,14 @@ body.home {
     width: 100%;
     pointer-events: none; /* 让鼠标穿透标题去点击照片 */
     color: #ffffff;
-    font-size: 2rem;
+
     font-weight:10rem !important;
 }
 .photo-wall-title h2 {
+    font-size: 1.5rem;
 
     color: rgb(210, 229, 253);
+    z-index: 15;
 
 }
 
