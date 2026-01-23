@@ -191,7 +191,24 @@ body.home {
     font-size: 7000;
     font-weight:10rem !important;
 }
-
+.photo-wall-title h2 {
+    display: inline-block;
+    
+    /* 【修改】大幅调大标题字体 */
+    /* 解释：最小 3rem，随屏幕变大至 6rem */
+    font-size: clamp(1rem, 6vw, 6rem);
+    
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.8);
+    margin: 0;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 20px 50px; /* 内边距也稍微加大 */
+    border-radius: 100px;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.15);
+}
 
 
 /* 照片网格 */
