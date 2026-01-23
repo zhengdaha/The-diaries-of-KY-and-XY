@@ -180,16 +180,16 @@ body.home {
 /* 标题容器：绝对居中，层级最高 */
 .photo-wall-title {
     position: absolute;
-    top: 7%;
+    top: 5%;
     left: 50%;
     transform: translateX(-50%);
     z-index: 10;
     text-align: center;
     width: 100%;
     pointer-events: none; /* 让鼠标穿透标题去点击照片 */
-    color: #124bd0;
+    color: #6197e8;
     font-size: large;
-    font-weight:5rem !important;
+    font-weight:10rem !important;
 }
 
 
