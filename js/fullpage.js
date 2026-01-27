@@ -12,14 +12,16 @@
         // 【在此处添加照片路径】
         // 建议使用 6-8 张横竖搭配的照片，以获得最佳效果
         photoList: [
-            "./The-diaries-of-KY-and-XY/img/New Year's Eve.JPG",
-            "./The-diaries-of-KY-and-XY/img/Yuexiu_Park1.JPG", 
-            "./The-diaries-of-KY-and-XY/img/Yuexiu_Park2.JPG",
-            "./The-diaries-of-KY-and-XY/img/Yuexiu_Park3.JPG",
-            "./The-diaries-of-KY-and-XY/img/Cat1.JPG",
-            "./The-diaries-of-KY-and-XY/img/IMG_0459.JPG",
-            "./The-diaries-of-KY-and-XY/img/Shipai_Park.JPG",
-            "./The-diaries-of-KY-and-XY/img/Internet cafe.JPG"
+            // 删掉前面的 "."，确保以 "/" 开头
+            // 最好检查一下文件名是否真的有空格，如果能重命名文件去掉空格最好
+            "/The-diaries-of-KY-and-XY/img/New_Year's_Eve.JPG",
+            "/The-diaries-of-KY-and-XY/img/Yuexiu_Park1.JPG", 
+            "/The-diaries-of-KY-and-XY/img/Yuexiu_Park2.JPG",
+            "/The-diaries-of-KY-and-XY/img/Yuexiu_Park3.JPG",
+            "/The-diaries-of-KY-and-XY/img/Cat1.JPG",
+            "/The-diaries-of-KY-and-XY/img/IMG_0459.JPG",
+            "/The-diaries-of-KY-and-XY/img/Shipai_Park.JPG",
+            "/The-diaries-of-KY-and-XY/img/Internet_cafe.JPG"
         ]
     };
 
