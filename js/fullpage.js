@@ -12,14 +12,14 @@
         // 【在此处添加照片路径】
         // 建议使用 6-8 张横竖搭配的照片，以获得最佳效果
         photoList: [
-            "./The-diaries-of-KY-and-XY//img/New Year's Eve.jpg",
-            "./The-diaries-of-KY-and-XY//img/Yuexiu_Park1.jpg", 
-            "./The-diaries-of-KY-and-XY//img/Yuexiu_Park2.jpg",
-            "./The-diaries-of-KY-and-XY//img/Yuexiu_Park3.jpg",
-            "./The-diaries-of-KY-and-XY//img/Cat1.jpg",
-            "./The-diaries-of-KY-and-XY//img/IMG_0459.jpg",
-            "./The-diaries-of-KY-and-XY//img/Shipai_Park.jpg",
-            "./The-diaries-of-KY-and-XY//img/Internet cafe.jpg"
+            "./The-diaries-of-KY-and-XY/img/New Year's Eve.JPG",
+            "./The-diaries-of-KY-and-XY/img/Yuexiu_Park1.JPG", 
+            "./The-diaries-of-KY-and-XY/img/Yuexiu_Park2.JPG",
+            "./The-diaries-of-KY-and-XY/img/Yuexiu_Park3.JPG",
+            "./The-diaries-of-KY-and-XY/img/Cat1.JPG",
+            "./The-diaries-of-KY-and-XY/img/IMG_0459.JPG",
+            "./The-diaries-of-KY-and-XY/img/Shipai_Park.JPG",
+            "./The-diaries-of-KY-and-XY/img/Internet cafe.JPG"
         ]
     };
 
