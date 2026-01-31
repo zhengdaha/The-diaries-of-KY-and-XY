@@ -70,8 +70,6 @@ body.home {
 }
 
 /* --- 对齐槽位 (Alignment Slots) --- */
-
-/* 1. 图标层 */
 .align-slot-icon {
     min-height: 140px; 
     display: flex;
@@ -80,7 +78,6 @@ body.home {
     width: 100%;
 }
 
-/* 2. 标题层 */
 .align-slot-title {
     min-height: 60px;
     display: flex;
@@ -89,7 +86,6 @@ body.home {
     width: 100%;
 }
 
-/* 3. 计时器层 */
 .align-slot-timer {
     min-height: 120px;
     display: flex;
@@ -98,7 +94,6 @@ body.home {
     width: 100%;
 }
 
-/* 4. 底部层 */
 .align-slot-footer1 {
     min-height: 120px;
     display: flex;
@@ -108,7 +103,7 @@ body.home {
     justify-content: flex-start; 
     padding-top: 10px;
     width: 100%;
-    font-weight:  !important;
+    font-weight: 700 !important;
     font-size: 1.1rem !important;
 }
 .align-slot-footer2 {
@@ -165,7 +160,7 @@ body.home {
 #meet-timer { font-size: clamp(1.8rem, 6vw, 3rem); }
 
 /* ============================================================
-   4. 第三屏：照片墙样式 (NEW)
+   4. 第三屏：照片墙样式
    ============================================================ */
 /* 容器 */
 .photo-wall-section {
@@ -188,18 +183,14 @@ body.home {
     width: 100%;
     pointer-events: none; /* 让鼠标穿透标题去点击照片 */
     color: #ffffff;
-
-    font-weight:10rem !important;
 }
+
 .photo-wall-title h2 {
     font-size: 2rem;
-
     color: rgb(163, 192, 227);
     z-index: 15;
-
+    text-shadow: 0 2px 10px rgba(0,0,0,0.5);
 }
-
-
 
 /* 照片网格 */
 .photo-wall-container {
@@ -210,12 +201,12 @@ body.home {
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
     grid-auto-rows: 280px;
     gap: 30px;
-    padding: 40px;
+    padding: 80px 40px 40px 40px; /* 顶部留出空间给标题 */
     box-sizing: border-box;
     align-content: center; /* 垂直居中 */
     
     /* 默认稍微暗一点，鼠标移入变亮 */
-    filter: brightness(0.5);
+    filter: brightness(0.6);
     transition: filter 0.6s ease;
     z-index: auto; 
     position: relative;
@@ -243,7 +234,7 @@ body.home {
 }
 
 .memory-photo-item:hover {
-    transform: scale(1.5) rotate(0deg) !important; /* 悬停放大回正 */
+    transform: scale(1.3) rotate(0deg) !important; /* 悬停放大回正 */
     z-index: 999;
     box-shadow: 0 20px 40px rgba(0,0,0,0.6);
     border-color: #fff;
@@ -258,24 +249,221 @@ body.home {
 }
 
 /* ============================================================
-   5. 第四屏：结尾页样式 (ID Updated)
+   5. 第四屏：信封交互样式 (NEW)
    ============================================================ */
-/* 注意：这里ID从 section-3 改为了 section-4 */
-#section-4 {
-    background: #2c3e50;
-    color: #ecf0f1;
+#section-4.letter-section {
+    background: #2c3e50; /* 深色背景 */
+    perspective: 1000px; /* 3D透视 */
+    overflow: hidden;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
+}
+
+/* 提示文字 */
+.instruction-text {
+    position: absolute;
+    bottom: 15%;
+    color: rgba(255,255,255,0.6);
+    font-size: 1rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    transition: opacity 0.5s;
+    animation: pulse 2s infinite;
+    pointer-events: none;
+}
+@keyframes pulse { 0% {opacity:0.3} 50% {opacity:0.8} 100% {opacity:0.3} }
+
+/* 信封容器 */
+.envelope-wrapper {
+    position: relative;
+    width: 320px;
+    height: 220px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 50px; /* 稍微向上提一点 */
+}
+
+.envelope {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background: #e0e0e0;
+    border-radius: 5px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    z-index: 1;
+}
+
+/* 信封正面 (口袋部分) - 使用CSS边框绘制 */
+.envelope-front {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 0 160px 120px 160px; /* 左 右 下 左 */
+    border-color: transparent transparent #f7f7f7 transparent;
+    z-index: 10;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
+    pointer-events: none; /* 让点击穿透 */
+}
+
+/* 使用伪元素绘制左右侧翼 */
+.envelope::after, .envelope::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    z-index: 5;
+    pointer-events: none;
+}
+
+/* 左侧翼 */
+.envelope::before {
+    left: 0;
+    border-width: 110px 0 110px 160px;
+    border-color: transparent transparent transparent #e6e6e6;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+}
+
+/* 右侧翼 */
+.envelope::after {
+    right: 0;
+    border-width: 110px 160px 110px 0;
+    border-color: transparent #e6e6e6 transparent transparent;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+/* 信封盖 (Flap) */
+.envelope-flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 120px 160px 0 160px; /* 上 右 下 左 */
+    border-color: #f0f0f0 transparent transparent transparent;
+    z-index: 15; /* 初始在最上面 */
+    transform-origin: top;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.2s 0.3s;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+}
+
+/* 火漆印章 */
+.wax-seal {
+    position: absolute;
+    top: 60px; /* 位于盖子尖端附近 */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 45px;
+    height: 45px;
+    background: #c0392b; /* 深红色 */
+    border-radius: 50%;
+    border: 3px solid #e74c3c;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    z-index: 20;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.8);
+    transition: transform 0.2s, opacity 0.5s;
+}
+
+.wax-seal img {
+    width: 70%;
+    height: 70%;
+    object-fit: cover;
+    border-radius: 50%;
+    opacity: 0.9;
+}
+
+.wax-seal:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+/* 信纸 */
+.letter {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    height: 90%;
+    background: #fffdf7; /* 米白色纸张 */
+    padding: 20px;
+    box-sizing: border-box;
+    z-index: 2; /* 初始在侧翼下面 */
+    transition: transform 0.8s ease-out 0.6s, z-index 0.1s 0.6s, height 0.8s ease-out 0.6s;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    overflow-y: auto; /* 允许滚动 */
+    overflow-x: hidden;
+    border-radius: 2px;
+}
+
+/* 自定义滚动条样式 */
+.letter::-webkit-scrollbar {
+    width: 4px;
+}
+.letter::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+}
+.letter::-webkit-scrollbar-thumb {
+    background: #d4aa70; 
+    border-radius: 2px;
+}
+
+/* 信纸文字样式 */
+.letter-content {
+    font-family: 'Georgia', 'Times New Roman', serif;
+    color: #444;
+    font-size: 1rem;
+    line-height: 1.6;
+    font-style: italic;
+    white-space: pre-wrap;
+}
+
+/* --- 交互动画状态 --- */
+
+/* 1. 点击后，印章消失 */
+.envelope.open .wax-seal {
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, -80px) scale(0.5);
+}
+
+/* 2. 盖子打开 (翻转180度) */
+.envelope.open .envelope-flap {
+    transform: rotateX(180deg);
+    z-index: 1; /* 翻开后层级变低，这样信纸出来时不会被挡住 */
+}
+
+/* 3. 信纸滑出 (向上移动并变长) */
+.envelope.open .letter {
+    transform: translateX(-50%) translateY(-100px); /* 向上滑出 */
+    z-index: 11; /* 此刻需要比信封正面层级更高 */
+    height: 320px; /* 展开变长 */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
 }
 
 /* ============================================================
-   6. 统一的 Continue 按钮
+   6. 统一的 Buttons 样式
    ============================================================ */
 #scroll-down, 
 #scroll-down-2,
-#scroll-down-3 { /* 确保 scroll-down-3 包含在内 */
+#scroll-down-3 {
     position: absolute !important;
     bottom: 7.5vh !important;
     left: 50% !important;
@@ -338,23 +526,25 @@ body.home {
    7. 响应式适配 (手机端)
    ============================================================ */
 @media screen and (max-width: 768px) {
+    /* 基础布局重置 */
     .love-dashboard-full-screen {
         flex-direction: column;
         height: auto;
         min-height: 100vh;
     }
+    
+    /* 第二屏 */
     .love-panel-split {
         width: 100%;
         height: 50vh;
         padding: 20px 10px;
     }
     
-    /* 手机端 Slot 高度调整 */
     .align-slot-icon { min-height: 100px; }
     .align-slot-timer { min-height: 80px; }
     .align-slot-footer1, .align-slot-footer2 { min-height: 80px; }
     
-    /* 按钮位置调整 */
+    /* 按钮位置 */
     #scroll-down, #scroll-down-2, #scroll-down-3 {
         padding: 8px 24px !important;
         bottom: 5vh !important;
@@ -362,17 +552,14 @@ body.home {
     #scroll-down::after, #scroll-down-2::after, #scroll-down-3::after {
         font-size: 1rem !important;
     }
-    
-    /* 手机端隐藏部分多余按钮，只保留最后一个或根据需要显示 */
-    /* 这里你可以选择是否在手机上隐藏中间页面的按钮以避免遮挡内容 */
-    /* #scroll-down-2 { display: none !important; } */
 
-    /* 照片墙手机适配 */
+    /* 第三屏：照片墙 */
     .photo-wall-container {
         grid-template-columns: repeat(2, 1fr); /* 强制两列 */
         grid-auto-rows: 180px;
         gap: 15px;
         padding: 20px;
+        padding-top: 60px;
     }
     
     .photo-wall-title h2 {
@@ -381,8 +568,23 @@ body.home {
         width: 85%;
     }
     
-    /* 结尾页适配 */
-    #section-4 { height: 100vh; }
+    /* 第四屏：信封手机适配 */
+    #section-4.letter-section {
+        height: 100vh; /* 强制占满一屏 */
+    }
+
+    .envelope-wrapper {
+        transform: scale(0.85); /* 手机上整体缩小，防止溢出 */
+    }
+    
+    .envelope.open .letter {
+        height: 360px; /* 手机上信纸更长，方便阅读 */
+        transform: translateX(-50%) translateY(-60px); /* 上移距离减少，避免顶出屏幕 */
+    }
+    
+    .instruction-text {
+        bottom: 10%;
+    }
 }
 
 /* ============================================================
