@@ -247,56 +247,114 @@ body.home {
     display: block;
     border-radius: 2px;
 }
-
 /* ============================================================
-   5. 第四屏：信封交互样式 (NEW)
+   5. 第四屏：信封交互样式 (Final Fixed Version)
    ============================================================ */
-#section-4.letter-section {
-    background: #2c3e50; /* 深色背景 */
-    perspective: 1000px; /* 3D透视 */
-    overflow: hidden;
+   #section-4.letter-section {
+    background: #1a1a1a; /* 深色沉浸式背景 */
+    perspective: 1200px; /* 3D 景深 */
+    overflow: hidden;    /* 强制隐藏溢出，防止滚动条出现 */
     display: flex;
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    position: relative;
+    width: 100vw;
+    height: 100vh;
 }
 
-/* 提示文字 */
+/* --- 1. 提示语 (TAP THE SEAL TO OPEN) --- */
 .instruction-text {
     position: absolute;
-    bottom: 15%;
-    color: rgba(255,255,255,0.6);
-    font-size: 1rem;
+    bottom: 20%; 
+    color: #bfa36f; /* 暗金色 */
+    font-size: 0.8rem;
     letter-spacing: 3px;
     text-transform: uppercase;
-    transition: opacity 0.5s;
-    animation: pulse 2s infinite;
+    font-weight: 300;
+    font-size: 2rem;
+    
+    /* 基础过渡效果 */
+    transition: opacity 0.5s ease;
+    
+    /* 呼吸动画 */
+    animation: pulse 3s infinite ease-in-out;
+    
     pointer-events: none;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+    z-index: 50;
 }
-@keyframes pulse { 0% {opacity:0.3} 50% {opacity:0.8} 100% {opacity:0.3} }
 
-/* 信封容器 */
+/* 【新增】隐藏状态：停止动画并变透明 */
+.instruction-text.is-hidden {
+    opacity: 0 !important;
+    animation: none !important; /* 关键：必须停止动画，否则opacity会自动变回 */
+}
+
+@keyframes pulse { 0% {opacity:0.4} 50% {opacity:1} 100% {opacity:0.4} }
+
+
+
+/* --- 2. 关闭按钮 (Close Letter) --- */
+.close-letter-btn {
+    position: absolute;
+    bottom: 18%; /* 位置与提示语相近 */
+    padding: 8px 24px;
+    background: transparent;
+    border: 1px solid rgba(191, 163, 111, 0.4);
+    color: #bfa36f;
+    font-family: 'Georgia', serif; /* 衬线体显高级 */
+    font-size: 0.9rem;
+    cursor: pointer;
+    border-radius: 50px; /* 圆角胶囊样式 */
+    transition: all 0.4s ease;
+    opacity: 0; /* 默认隐藏 */
+    pointer-events: none; /* 默认不可点击 */
+    z-index: 60;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.close-letter-btn:hover {
+    background: rgba(191, 163, 111, 0.15);
+    border-color: #d4af37;
+    color: #d4af37;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+/* --- 3. 信封容器 (独立尺寸控制) --- */
 .envelope-wrapper {
     position: relative;
-    width: 320px;
-    height: 220px;
+    /* 【核心设置】固定信封物理尺寸 (宽高比 3:2) */
+    width: 720px; 
+    height: 480px; 
+    
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 50px; /* 稍微向上提一点 */
+    
+    /* 整体下移 40px，为信纸向上弹出留出顶部空间，防止超出页面 */
+    transform: translateY(40px); 
+    
+    /* 强烈的黑色投影，制造悬浮感 */
+    filter: drop-shadow(0 20px 30px rgba(0,0,0,0.6));
+    z-index: 10;
 }
 
+/* 信封主体 */
 .envelope {
     position: relative;
     width: 100%;
     height: 100%;
-    background: #e0e0e0;
-    border-radius: 5px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    background: #222222; /* 信封内部底色 */
+    border-radius: 6px;
     z-index: 1;
 }
 
-/* 信封正面 (口袋部分) - 使用CSS边框绘制 */
+/* --- 4. 构造信封几何形状 (基于 width 360 / height 240 计算) --- */
+
+/* 正面口袋 (三角形) */
 .envelope-front {
     position: absolute;
     bottom: 0;
@@ -304,158 +362,208 @@ body.home {
     width: 0;
     height: 0;
     border-style: solid;
-    border-width: 0 160px 120px 160px; /* 左 右 下 左 */
-    border-color: transparent transparent #f7f7f7 transparent;
+    /* 宽度的一半是 180px，高度设为 140px */
+    border-width: 0 360px 320px 360px; 
+    /* 颜色 #2a2a2a (磨砂黑) */
+    border-color: transparent transparent #2a2a2a transparent;
     z-index: 10;
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-    box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
     pointer-events: none; /* 让点击穿透 */
 }
 
-/* 使用伪元素绘制左右侧翼 */
-.envelope::after, .envelope::before {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    width: 0;
-    height: 0;
-    border-style: solid;
-    z-index: 5;
-    pointer-events: none;
+/* 左右侧翼 (用于制造阴影层次) */
+.envelope::before { /* 左侧翼 */
+    content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 0; border-style: solid; z-index: 5; pointer-events: none;
+    border-width: 240px 0 240px 360px;
+    border-color: transparent transparent transparent #202020; /* 比正面稍深 */
+    border-top-left-radius: 6px; border-bottom-left-radius: 6px;
+}
+.envelope::after { /* 右侧翼 */
+    content: ''; position: absolute; bottom: 0; right: 0; width: 0; height: 0; border-style: solid; z-index: 5; pointer-events: none;
+    border-width: 240px 360px 240px 0;
+    border-color: transparent #1f1f1f transparent transparent; /* 比左侧稍深 */
+    border-top-right-radius: 6px; border-bottom-right-radius: 6px;
 }
 
-/* 左侧翼 */
-.envelope::before {
-    left: 0;
-    border-width: 110px 0 110px 160px;
-    border-color: transparent transparent transparent #e6e6e6;
-    border-top-left-radius: 5px;
-    border-bottom-left-radius: 5px;
-}
-
-/* 右侧翼 */
-.envelope::after {
-    right: 0;
-    border-width: 110px 160px 110px 0;
-    border-color: transparent #e6e6e6 transparent transparent;
-    border-top-right-radius: 5px;
-    border-bottom-right-radius: 5px;
-}
-
-/* 信封盖 (Flap) */
+/* 信封盖 (Flap - 关键活动部件) */
 .envelope-flap {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 120px 160px 0 160px; /* 上 右 下 左 */
-    border-color: #f0f0f0 transparent transparent transparent;
-    z-index: 15; /* 初始在最上面 */
+    top: 0; left: 0; width: 0; height: 0; border-style: solid;
+    /* 盖子高度 140px，宽度 360px */
+    border-width: 320px 360px 0 360px; 
+    border-color: #2d2d2d transparent transparent transparent; /* 比正面稍亮 */
+    z-index: 15;
     transform-origin: top;
-    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.2s 0.3s;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    transition: transform 2s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.2s 1.5s;
+    border-top-left-radius: 6px; border-top-right-radius: 6px;
+    filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5));
+}
+/* ============================================================
+   5. 修改后的火漆印样式 (配合 fullpage.js 使用图片)
+   ============================================================ */
+
+/* 1. 针对 fullpage.js 生成的 HTML 结构的修正 */
+/* JS 代码中在 .envelope 里额外生成了一个 <img> 标签，
+   我们需要隐藏它，否则会出现两个印章或布局错乱。
+   我们只通过 CSS 的 background-image 来显示印章。 */
+   .envelope > img {
+    display: none !important;
 }
 
-/* 火漆印章 */
+/* 2. 火漆印主体样式 */
 .wax-seal {
     position: absolute;
-    top: 60px; /* 位于盖子尖端附近 */
+    /* 位置调整：根据信封盖的高度，100px左右通常能压在盖子尖端 */
+    top: 300px; 
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 45px;
-    height: 45px;
-    background: #c0392b; /* 深红色 */
-    border-radius: 50%;
-    border: 3px solid #e74c3c;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    
+    /* --- 核心修改：使用图片背景 --- */
+    width: 150px;  /* 设置合适的宽度 */
+    height: 150px; /* 设置合适的高度 */
+    
+    /* 请确保此路径与你的图片实际位置一致 */
+    /* 建议使用相对路径 ./img/Seal.png 或完整路径 */
+    background-image: url(/The-diaries-of-KY-and-XY/img/Seal.png); 
+    
+    background-size: contain;    /* 保证图片完整显示 */
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: transparent; /* 去除原本的红色背景 */
+    border: none;                  /* 去除原本的边框 */
+    box-shadow: none;              /* 去除盒阴影，改用下方滤镜阴影 */
+    
+    /* --- 交互与层级 --- */
     z-index: 20;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: rgba(255,255,255,0.8);
-    transition: transform 0.2s, opacity 0.5s;
+    transition: transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.5s;
+    
+    /* --- 投影优化 --- */
+    /* drop-shadow 能让阴影贴合 PNG 图片的透明边缘，比 box-shadow 更逼真 */
+    filter: drop-shadow(0 5px 6px rgba(0,0,0,0.4));
 }
 
-.wax-seal img {
-    width: 70%;
-    height: 70%;
-    object-fit: cover;
-    border-radius: 50%;
-    opacity: 0.9;
+
+/* 4. 悬停交互效果 */
+.wax-seal:hover { 
+    /* 鼠标放上去稍微放大，增加互动感 */
+    transform: translate(-50%, -50%) scale(1.15); 
+    filter: drop-shadow(0 8px 10px rgba(0,0,0,0.5));
 }
 
-.wax-seal:hover {
-    transform: translate(-50%, -50%) scale(1.1);
+/* 5. 信封打开时的状态 (保持原有逻辑) */
+.envelope.open .wax-seal {
+    opacity: 0; 
+    pointer-events: none;
+    /* 打开时向上飘并消失 */
+    transform: translate(-50%, -120px) scale(0.5);
 }
-
-/* 信纸 */
+/* --- 6. 黑金信纸 (Letter) --- */
 .letter {
     position: absolute;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 90%;
-    height: 90%;
-    background: #fffdf7; /* 米白色纸张 */
-    padding: 20px;
+    
+    /* 初始宽度比信封略窄 */
+    width: 500px; 
+    height: 100%; /* 初始高度塞满信封 */
+    
+    background: #181818; /* 纸张黑底 */
+    /* 模拟淡淡的信纸横线 */
+    background-image: repeating-linear-gradient(transparent, transparent 31px, rgba(255, 255, 255, 0.05) 31px, rgba(255, 255, 255, 0.05) 32px);
+    
+    padding: 25px 25px;
     box-sizing: border-box;
-    z-index: 2; /* 初始在侧翼下面 */
-    transition: transform 0.8s ease-out 0.6s, z-index 0.1s 0.6s, height 0.8s ease-out 0.6s;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-    overflow-y: auto; /* 允许滚动 */
+    z-index: 2; /* 初始在侧翼之下 */
+    
+    /* 这里的 height transition 负责信纸变长的动画 */
+    transition: transform 1.5s ease-out 0.4s, height 0.8s ease-out 0.4s, z-index 0.1s 1s;
+    
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.5);
+    overflow-y: auto;
     overflow-x: hidden;
-    border-radius: 2px;
+    border-radius: 3px;
+    border: 1px solid rgba(255,255,255,0.08); /* 极细边框增加精致感 */
 }
 
-/* 自定义滚动条样式 */
-.letter::-webkit-scrollbar {
-    width: 4px;
-}
-.letter::-webkit-scrollbar-track {
-    background: #f1f1f1; 
-}
-.letter::-webkit-scrollbar-thumb {
-    background: #d4aa70; 
-    border-radius: 2px;
-}
-
-/* 信纸文字样式 */
+/* 字体样式 */
 .letter-content {
     font-family: 'Georgia', 'Times New Roman', serif;
-    color: #444;
+    color: #d4af37; /* 香槟金文字 */
     font-size: 1rem;
-    line-height: 1.6;
+    line-height: 2rem; /* 匹配背景横线高度 */
     font-style: italic;
     white-space: pre-wrap;
 }
 
-/* --- 交互动画状态 --- */
+/* 滚动条美化 */
+.letter::-webkit-scrollbar { width: 3px; }
+.letter::-webkit-scrollbar-track { background: #111; }
+.letter::-webkit-scrollbar-thumb { background: #555; border-radius: 2px; }
 
-/* 1. 点击后，印章消失 */
+/* --- 7. 交互动画状态 (OPEN) --- */
+
+/* 步骤1: 印章消失 */
 .envelope.open .wax-seal {
-    opacity: 0;
-    pointer-events: none;
+    opacity: 0; pointer-events: none;
     transform: translate(-50%, -80px) scale(0.5);
 }
 
-/* 2. 盖子打开 (翻转180度) */
+/* 步骤2: 盖子打开 (翻转180度) */
 .envelope.open .envelope-flap {
     transform: rotateX(180deg);
-    z-index: 1; /* 翻开后层级变低，这样信纸出来时不会被挡住 */
+    z-index: 1; /* 翻到背面去 */
+    border-color: #222 transparent transparent transparent; /* 背面颜色稍暗 */
 }
 
-/* 3. 信纸滑出 (向上移动并变长) */
+/* 步骤3: 信纸滑出 (关键计算防止溢出) */
 .envelope.open .letter {
-    transform: translateX(-50%) translateY(-100px); /* 向上滑出 */
-    z-index: 11; /* 此刻需要比信封正面层级更高 */
-    height: 320px; /* 展开变长 */
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    /* 层级提升，遮住信封正面 */
+    z-index: 11; 
+    
+    /* 展开后的高度：340px
+       (信封本身高 240px，信纸比信封高 100px) */
+    height: 500px; 
+    
+    /* 向上位移：-100px
+       这意味着信纸底部会上移 100px。
+       结果：信纸底部距离信封底部 100px，信纸顶部超出信封顶部 (340-140)=200px。
+       因为 Wrapper 下移了 40px，所以顶部空间是充足的。 */
+    transform: translateX(-50%) translateY(-100px);
+    
+    box-shadow: 0 15px 40px rgba(0,0,0,0.8); /* 强烈的浮空投影 */
+}
+
+/* --- 8. 手机适配 (Responsive) --- */
+@media screen and (max-width: 768px) {
+    .envelope-wrapper {
+        /* 手机上宽度缩小到 310px，防止左右贴边 */
+        width: 310px; 
+        height: 210px; /* 保持比例大致一致 */
+        transform: translateY(20px); /* 手机上少移一点 */
+    }
+    
+    /* 重新计算三角形边框 (基于 width 310) */
+    .envelope-front { border-width: 0 155px 125px 155px; }
+    .envelope::before { border-width: 105px 0 105px 155px; }
+    .envelope::after { border-width: 105px 155px 105px 0; }
+    .envelope-flap { border-width: 125px 155px 0 155px; }
+    
+    .letter { 
+        width: 280px; /* 信纸宽度适配 */
+    }
+    
+    .envelope.open .letter {
+        /* 手机上高度设为 340px，方便阅读更多文字 */
+        height: 340px; 
+        /* 向上弹出距离稍微收敛，避免顶到顶部导航栏 */
+        transform: translateX(-50%) translateY(-80px);
+    }
+    
+    .instruction-text { bottom: 12%; font-size: 0.7rem; }
+    .close-letter-btn { bottom: 8%; }
 }
 
 /* ============================================================
