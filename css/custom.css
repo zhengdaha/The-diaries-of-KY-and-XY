@@ -387,15 +387,18 @@ body.home {
 }
 
 /* 信封盖 (Flap - 关键活动部件) */
+/* 信封盖 (Flap - 关键活动部件) */
 .envelope-flap {
     position: absolute;
     top: 0; left: 0; width: 0; height: 0; border-style: solid;
-    /* 盖子高度 140px，宽度 360px */
     border-width: 320px 360px 0 360px; 
-    border-color: #2d2d2d transparent transparent transparent; /* 比正面稍亮 */
+    border-color: #2d2d2d transparent transparent transparent; 
     z-index: 15;
     transform-origin: top;
-    transition: transform 2s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.2s 1.5s;
+    
+    /* 修改点：加快翻盖速度 (0.6s)，去除多余延迟，确保动作干脆 */
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.1s;
+    
     border-top-left-radius: 6px; border-top-right-radius: 6px;
     filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5));
 }
@@ -460,42 +463,41 @@ body.home {
     transform: translate(-50%, -120px) scale(0.5);
 }
 /* --- 6. 黑金信纸 (Letter) --- */
+/* --- 6. 黑金信纸 (Letter) --- */
 .letter {
     position: absolute;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    
-    /* 初始宽度比信封略窄 */
     width: 500px; 
-    height: 100%; /* 初始高度塞满信封 */
-    
-    background: #181818; /* 纸张黑底 */
-    /* 模拟淡淡的信纸横线 */
+    height: 100%; 
+    background: #181818; 
     background-image: repeating-linear-gradient(transparent, transparent 31px, rgba(255, 255, 255, 0.05) 31px, rgba(255, 255, 255, 0.05) 32px);
-    
     padding: 25px 25px;
     box-sizing: border-box;
-    z-index: 2; /* 初始在侧翼之下 */
-    
-    /* 这里的 height transition 负责信纸变长的动画 */
-    transition: transform 1.5s ease-out 0.4s, height 0.8s ease-out 0.4s, z-index 0.1s 1s;
+    z-index: 2; 
     
     box-shadow: 0 -2px 10px rgba(0,0,0,0.5);
     overflow-y: auto;
     overflow-x: hidden;
     border-radius: 3px;
-    border: 1px solid rgba(255,255,255,0.08); /* 极细边框增加精致感 */
-}
+    border: 1px solid rgba(255,255,255,0.08); 
 
+    /* 修改点：关闭时的过渡。当关闭时，信纸缩回去不需要太多延迟，稍微快一点 */
+    transition: transform 0.6s ease-in, height 0.6s ease-in, z-index 0.1s;
+}
 /* 字体样式 */
 .letter-content {
     font-family: 'Georgia', 'Times New Roman', serif;
-    color: #d4af37; /* 香槟金文字 */
+    color: #d4af37; 
     font-size: 1rem;
-    line-height: 2rem; /* 匹配背景横线高度 */
+    line-height: 2rem; 
     font-style: italic;
     white-space: pre-wrap;
+    
+    /* 修改点：初始透明度为 0，防止信纸还没出来就看到字 */
+    opacity: 0;
+    transition: opacity 0.5s ease;
 }
 
 /* 滚动条美化 */
@@ -506,64 +508,55 @@ body.home {
 /* --- 7. 交互动画状态 (OPEN) --- */
 
 /* 步骤1: 印章消失 */
+/* --- 7. 交互动画状态 (OPEN) --- */
+
+/* 步骤1: 印章消失 */
 .envelope.open .wax-seal {
-    opacity: 0; pointer-events: none;
+    opacity: 0; 
+    pointer-events: none;
     transform: translate(-50%, -80px) scale(0.5);
+    transition: all 0.4s ease; /* 快速消失 */
 }
 
-/* 步骤2: 盖子打开 (翻转180度) */
+/* 步骤2: 盖子打开 (0s - 0.6s) */
 .envelope.open .envelope-flap {
     transform: rotateX(180deg);
-    z-index: 1; /* 翻到背面去 */
-    border-color: #222 transparent transparent transparent; /* 背面颜色稍暗 */
+    z-index: 1; 
+    border-color: #222 transparent transparent transparent; 
+    /* 盖子立即开始旋转，耗时 0.6s */
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.1s 0.2s;
 }
 
-/* 步骤3: 信纸滑出 (关键计算防止溢出) */
+/* 步骤3: 信纸滑出 (0.6s - 1.6s) */
 .envelope.open .letter {
-    /* 层级提升，遮住信封正面 */
     z-index: 11; 
-    
-    /* 展开后的高度：340px
-       (信封本身高 240px，信纸比信封高 100px) */
     height: 500px; 
-    
-    /* 向上位移：-100px
-       这意味着信纸底部会上移 100px。
-       结果：信纸底部距离信封底部 100px，信纸顶部超出信封顶部 (340-140)=200px。
-       因为 Wrapper 下移了 40px，所以顶部空间是充足的。 */
     transform: translateX(-50%) translateY(-100px);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.8); 
     
-    box-shadow: 0 15px 40px rgba(0,0,0,0.8); /* 强烈的浮空投影 */
+    /* 修改点：核心逻辑
+       delay = 0.6s (等待盖子完全打开)
+       duration = 1s (信纸慢慢抽出) 
+    */
+    transition: transform 1s ease-out 0.6s, height 1s ease-out 0.6s, z-index 0s linear 0.6s;
 }
 
-/* --- 8. 手机适配 (Responsive) --- */
+/* 步骤4: 内容浮现 (1.6s 以后) */
+.envelope.open .letter .letter-content {
+    opacity: 1;
+    /* 修改点：
+       delay = 1.6s (等待盖子0.6s + 信纸1s = 1.6s)
+       duration = 1s (文字慢慢浮现)
+    */
+    transition: opacity 1s ease 1.6s;
+}
+
+/* 手机适配部分的微调 (保持原有逻辑，只需确认高度变化) */
 @media screen and (max-width: 768px) {
-    .envelope-wrapper {
-        /* 手机上宽度缩小到 310px，防止左右贴边 */
-        width: 310px; 
-        height: 210px; /* 保持比例大致一致 */
-        transform: translateY(20px); /* 手机上少移一点 */
-    }
-    
-    /* 重新计算三角形边框 (基于 width 310) */
-    .envelope-front { border-width: 0 155px 125px 155px; }
-    .envelope::before { border-width: 105px 0 105px 155px; }
-    .envelope::after { border-width: 105px 155px 105px 0; }
-    .envelope-flap { border-width: 125px 155px 0 155px; }
-    
-    .letter { 
-        width: 280px; /* 信纸宽度适配 */
-    }
-    
     .envelope.open .letter {
-        /* 手机上高度设为 340px，方便阅读更多文字 */
-        height: 340px; 
-        /* 向上弹出距离稍微收敛，避免顶到顶部导航栏 */
-        transform: translateX(-50%) translateY(-80px);
+        height: 360px; 
+        transform: translateX(-50%) translateY(-60px);
     }
-    
-    .instruction-text { bottom: 12%; font-size: 0.7rem; }
-    .close-letter-btn { bottom: 8%; }
 }
 
 /* ============================================================

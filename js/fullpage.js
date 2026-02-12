@@ -22,13 +22,15 @@
         ],
 
         // 信件内容 (支持 <br> 换行)
-        letterContent: `展信安,<br><br>
-        当我写下这封信的时候，距离我们下次见面还有一些时间。<br>
-        每一张照片都是我们共同的记忆碎片，而未来还有更多的故事等待我们去书写。<br>
-        <br>
-        I just want to tell you that I love you.<br>
-        Waiting for you.<br><br>
-        Yours,<br>KY`
+        letterContent: 
+        `展信安,<br>
+        在该那一次拥抱后离别，我坐上出租车后我没有太大的情绪起伏。可能是拥抱过后的余温依然留在我的怀中，它麻痹了我，让我如平常般拉开车门、放下包裹，告诉我似乎这是一次再普通不过的离别。但是我知道，我不敢望向车窗外，我只能漫无目的地看着手机，我害怕再看到你的身影，我知道那对我来说那将会是一针“留下来”的强心剂。<br><br>
+        回去后，我闭上眼睛，我想象着，要翻过多少高山，越过多少河流，才能再触摸到你；我细数着，还要熬过多少个寂静的夜晚，才能再次感受你的心跳；我眺望着，这中间相隔多少时空，我们的目光是否会在某片天空下交汇。<br><br>
+        他们说，在广州，不说“再见”，而是说“嘉禾望岗”，这个地铁站向北走是飞机场，向南走是地铁站，有无数的人在此分别。然而我们却从未在此处分别，提起”嘉禾望岗”，我只想起你曾嘲笑我模仿地铁播报时的窘态，在我的心里，这站不是意味着分别，它是藏在我心中的美好回忆。<br><br>
+        <div style="width: 100%; text-align: right; margin-top: 30px;">
+        鑫宇<br>
+        2026.02.11 20：59
+        </div>`
     };
 
     // 检测是否在首页
@@ -201,7 +203,7 @@
             // 3. 开始打字机逻辑
             setTimeout(() => {
                 typeWriter(CONFIG.letterContent, 'letter-content');
-            }, 800);
+            }, 1800);
         });
 
         // --- 关闭信封 ---
@@ -230,45 +232,82 @@
     /**
      * 打字机效果函数
      */
-    const typeWriter = (text, elementId) => {
-        const element = document.getElementById(elementId);
-        if (!element) return;
-        
-        element.innerHTML = ""; // 清空上次的内容
-        let i = 0;
-        
-        const type = () => {
-            // 安全检查：如果信封被关闭了，停止打字
-            const envelope = document.getElementById('envelope');
-            if (!envelope || !envelope.classList.contains('open')) return;
+/* source/js/fullpage.js */
 
-            if (i < text.length) {
-                // 处理 HTML 标签 (如 <br>)，一次性输出完整标签
-                if (text.charAt(i) === '<') {
-                    let tag = '';
-                    while (text.charAt(i) !== '>' && i < text.length) {
-                        tag += text.charAt(i);
-                        i++;
-                    }
-                    tag += '>';
+/**
+ * 修改后的打字机效果函数
+ * 支持标点符号停顿
+ */
+/* source/js/fullpage.js */
+
+/**
+ * 修改后的打字机效果函数
+ * 逗号延迟 1s，句号延迟 2s
+ */
+ const typeWriter = (text, elementId) => {
+    const element = document.getElementById(elementId);
+    if (!element) return;
+    
+    element.innerHTML = ""; // 清空上次的内容
+    let i = 0;
+    
+    const type = () => {
+        // 安全检查：如果信封被关闭了，停止打字
+        const envelope = document.getElementById('envelope');
+        // 必须确保 envelope 存在且有 open 类，否则停止
+        if (!envelope || !envelope.classList.contains('open')) return;
+
+        if (i < text.length) {
+            let currentDelay = 50; // 默认打字速度 (50ms，比原来稍微慢一点点更像写字)
+            const char = text.charAt(i);
+
+            // --- 1. 处理 HTML 标签 (如 <br>) ---
+            // 遇到标签时一次性输出，不产生打字延迟
+            if (char === '<') {
+                let tag = '';
+                // 循环提取完整标签，直到遇到 '>'
+                while (text.charAt(i) !== '>' && i < text.length) {
+                    tag += text.charAt(i);
                     i++;
-                    element.innerHTML += tag;
-                } else {
-                    element.innerHTML += text.charAt(i);
-                    i++;
+                }
+                tag += '>'; // 补上最后的 '>'
+                i++;        // 跳过 '>' 字符
+                element.innerHTML += tag;
+                
+                // 标签本身不延迟，稍微给一点点处理时间即可
+                currentDelay = 150; 
+
+            } else {
+                // --- 2. 处理普通字符 ---
+                element.innerHTML += char;
+                
+                // --- 3. 核心修改：标点符号延迟判断 ---
+                // 检测 逗号 (， ,) -> 1000ms
+                if (char === '，' || char === ',') {
+                    currentDelay = 1000; 
+                } 
+                // 检测 句号 (。 .) -> 2000ms
+                else if (char === '。' || char === '.') {
+                    currentDelay = 2000;
                 }
                 
-                // 自动滚动到底部
-                const letterContainer = document.getElementById('letter');
-                if (letterContainer) {
-                    letterContainer.scrollTop = letterContainer.scrollHeight;
-                }
-
-                setTimeout(type, 30); // 打字速度
+                i++; // 指向下一个字符
             }
-        };
-        type();
+            
+            // 自动滚动到底部 (确保长信也能看到最新打出的字)
+            const letterContainer = document.getElementById('letter');
+            if (letterContainer) {
+                letterContainer.scrollTop = letterContainer.scrollHeight;
+            }
+
+            // 递归调用，时间由 currentDelay 决定
+            setTimeout(type, currentDelay);
+        }
     };
+    
+    // 启动打字
+    type();
+};
 
     /**
      * 5. 辅助计算函数
