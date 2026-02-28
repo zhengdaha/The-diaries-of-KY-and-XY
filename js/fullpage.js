@@ -6,7 +6,7 @@
      */
     const CONFIG = {
         startDate: "2026-01-01T00:00:00", // 在一起的时间
-        meetDate: "2026-02-14T00:00:00",  // 下次见面的时间
+        meetDate: "2026-03-20T00:00:00",  // 下次见面的时间
         repoName: "/The-diaries-of-KY-and-XY/", 
         
         // 照片墙路径配置
@@ -18,7 +18,8 @@
             "/The-diaries-of-KY-and-XY/img/Cat1.JPG",
             "/The-diaries-of-KY-and-XY/img/IMG_0459.JPG",
             "/The-diaries-of-KY-and-XY/img/Shipai_Park.JPG",
-            "/The-diaries-of-KY-and-XY/img/Internet_cafe.JPG"
+            "/The-diaries-of-KY-and-XY/img/Internet_cafe.JPG",
+            "/The-diaries-of-KY-and-XY/img/Luoyang.jpg"
         ],
 
         // 信件内容 (支持 <br> 换行)
